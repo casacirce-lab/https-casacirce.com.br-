@@ -1,0 +1,26 @@
+# Publica os artigos agendados do site, todo dia às 8h de Brasília (11h UTC).
+# Também pode ser rodado na mão pelo botão "Run workflow" no GitHub.
+name: Publicar artigos agendados
+on:
+  schedule:
+    - cron: "0 11 * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python _agenda/publicar.py
+      - run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "casacirce-lab"
+            git config user.email "casacirce-lab@users.noreply.github.com"
+            git add -A
+            git commit -m "Publica artigo agendado"
+            git push
+          fi
