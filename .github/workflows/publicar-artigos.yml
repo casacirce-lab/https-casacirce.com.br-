@@ -1,9 +1,12 @@
-# Publica os artigos agendados do site, todo dia às 8h de Brasília (11h UTC).
+# Publica os artigos agendados do site, todo dia às 8h de Brasília (11h UTC),
+# com uma segunda tentativa às 11h de Brasília (14h UTC), caso o GitHub pule a primeira.
+# O robô pula o artigo que já está no ar, então a segunda tentativa não duplica nada.
 # Também pode ser rodado na mão pelo botão "Run workflow" no GitHub.
 name: Publicar artigos agendados
 on:
   schedule:
     - cron: "0 11 * * *"
+    - cron: "0 14 * * *"
   workflow_dispatch:
 permissions:
   contents: write
